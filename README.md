@@ -40,4 +40,4 @@ This project implements an AI Agent using LangGraph and integrates it with Gmail
 ## Demo
 
 The following video demonstrates the functionality of the Gmail AI Agent:
-[![Demo Video](https://drive.google.com/file/d/1EJ53TpSYHZeW8478WH_ESBNXxM8qVg5H/view?usp=sharing)
+[Demo Video](https://drive.google.com/file/d/1EJ53TpSYHZeW8478WH_ESBNXxM8qVg5H/view?usp=sharing)
