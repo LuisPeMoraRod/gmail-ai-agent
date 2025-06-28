@@ -1,5 +1,7 @@
 # Generalist Trigger for Gmail AI Agent
 
+This project implements an AI Agent using LangGraph and integrates it with Gmail using Composio to respond to emails on your behalf. The agent can also be used as a chatbot in the console.
+
 ## Prerequisites
 
 1. An Anthropic API key.
