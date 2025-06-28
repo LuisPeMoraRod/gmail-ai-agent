@@ -7,6 +7,10 @@ This project implements an AI Agent using LangGraph and integrates it with Gmail
 1. An Anthropic API key.
 2. A Composio API key.
 3. A Gmail integration ID from Composio. Follow the instructions in the [Composio documentation](https://docs.composio.dev/auth/set-up-integrations) to set up the Gmail integration and get the ID.
+4. `uv` package manager installed. You can install it using pip:
+   ```bash
+   pip install uv
+   ```
 
 ## Setup
 
