@@ -2,15 +2,23 @@ from composio_langgraph import Action, ComposioToolSet, App
 
 
 class GmailIntegrator:
+    """
+    A class to handle Gmail integration using Composio's toolset.
+    It uses OAuth to connect to a user's Gmail account and activates a trigger to listen for new emails.
+    It also provides a method to reply to a Gmail thread that can be used by the AI agent.
+    """
+
     def __init__(self, integration_id: str, user_id: str):
         self.toolset = ComposioToolSet()
         self.integration_id = integration_id
         self.user_id = user_id
         self.entity = self.toolset.get_entity(user_id)
+        self.active_connection = None
 
         try:
             connection_request = self.initiate_connection()
             self.wait_for_activation(connection_request)
+            self.enable_trigger()
 
         except Exception as e:
             print(f"Error connecting to Gmail: {e}")
@@ -48,8 +56,8 @@ class GmailIntegrator:
         print("Waiting for user authorization and connection activation...")
         try:
             # Poll Composio until the status is ACTIVE
-            active_connection = connection_request.wait_until_active(
-                client=self.toolset.client,  # Pass the Composio client instance
+            self.active_connection = connection_request.wait_until_active(
+                client=self.toolset.client,
                 timeout=timeout,
             )
 
@@ -66,4 +74,34 @@ class GmailIntegrator:
 
         except Exception as e:
             print(f"Connection did not become active within timeout or failed: {e}")
-            # Implement retry logic or inform the user
+
+    def enable_trigger(self):
+        """
+        Enable the trigger for the Gmail integration.
+        """
+        try:
+            res = self.entity.enable_trigger(
+                app=App.GMAIL, trigger_name="GMAIL_NEW_GMAIL_MESSAGE", config={}
+            )
+            if res["status"] != "success":
+                raise Exception(f"Failed to enable trigger: {res['message']}")
+        except Exception as e:
+            print(f"Error enabling trigger: {e}")
+
+    def reply_to_thread(self, recipient_email: str, message_text: str, thread_id: str):
+        """
+        Reply to a Gmail thread.
+        """
+        try:
+            action = Action.GMAIL_REPLY_TO_THREAD
+            response = self.toolset.execute_action(
+                action=action,
+                entity_id=self.user_id,
+                params={
+                    "recipient_email": recipient_email,
+                    "message_body": message_text,
+                    "thread_id": thread_id,
+                },
+            )
+        except Exception as e:
+            print(f"Error replying to thread: {e}")
